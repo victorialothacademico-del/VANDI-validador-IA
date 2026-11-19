@@ -332,7 +332,7 @@ if st.button("▶ Processar documentação", type="primary", disabled=not arquiv
             condicoes_isencao_confirmadas=(True if (isencao and tr_acima_300 is not True) else None),
         )
 
-        with st.spinner("Validando conforme a NT.017..."):
+        with st.spinner("Validando a documentação..."):
             res = validar_documentacao(sol, modelo=MODELO_DECISAO)
 
         # guarda PDFs e resultado no Supabase
