@@ -12,7 +12,10 @@ from pipeline import (
     analisar_pasta_pdfs, MODELO_DECISAO, MODELO_EXTRACAO_PDF,
 )
 
-st.set_page_config(page_title="Validação Documental NT.017", layout="wide")
+from vandi_theme import aplicar_tema, cabecalho, etapas, FAVICON
+
+st.set_page_config(page_title="VANDI — Validação Documental", page_icon=FAVICON, layout="wide")
+aplicar_tema()
 
 @st.cache_resource
 def db():
@@ -105,7 +108,8 @@ with st.sidebar:
     admin = bool(senha) and senha == st.secrets.get("ADMIN_SENHA", None)
 
 if admin:
-    st.title("📋 Validação final do analista")
+    cabecalho(area="Área do analista")
+    st.subheader("Validação final do analista")
 
     dados = db().table("submissoes").select("*").order("criado_em", desc=True).execute().data
     if not dados:
@@ -210,11 +214,11 @@ if admin:
     st.stop()
 
 # ---------------- NAVEGAÇÃO ----------------
-st.title("🔌 Validação Documental — Incorporação/Doação de Rede")
-st.caption("CEEE-D / Equatorial Energia | NT.017.EQTL – Revisão 04")
+cabecalho()
 
-pagina = st.radio("Menu", ["Enviar nova obra", "Consultar andamento"],
-                  horizontal=True, label_visibility="collapsed")
+with st.container(key="nav"):
+    pagina = st.radio("Menu", ["Enviar nova obra", "Consultar andamento"],
+                      horizontal=True, label_visibility="collapsed")
 
 # ---------------- CONSULTA DE ANDAMENTO (RT) ----------------
 if pagina == "Consultar andamento":
@@ -248,7 +252,8 @@ if pagina == "Consultar andamento":
 # ---------------- TELA 1: CADASTRO ----------------
 
 if "rt" not in st.session_state:
-    st.subheader("1. Cadastro do responsável técnico")
+    etapas(1)
+    st.subheader("Cadastro do responsável técnico")
     with st.form("cadastro"):
         nome = st.text_input("Nome completo *")
         crea = st.text_input("CREA / CFT")
@@ -271,7 +276,8 @@ rt = st.session_state["rt"]
 st.success(f"Olá, {rt['nome']}!")
 
 # ---------------- TELA 2: ENVIO ----------------
-st.subheader("2. Envio da documentação da obra")
+etapas(3 if st.session_state.get("resultado") else 2)
+st.subheader("Envio da documentação da obra")
 col1, col2 = st.columns(2)
 with col1:
     tipo = TIPOS[st.radio("Tipo de obra", list(TIPOS))]
