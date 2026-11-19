@@ -153,7 +153,6 @@ def cabecalho(area: str | None = None):
             <div class="vandi-sep"></div>
             <div class="vandi-titulo">
                 <b>Validador Automatizado de Documentação<br>para Incorporação de Redes de Distribuição</b>
-            </div>
             <div class="vandi-chip">{chip}</div>
         </div>
         """,
