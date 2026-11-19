@@ -58,7 +58,6 @@ header[data-testid="stHeader"] {{ background: transparent; }}
 .vandi-sep {{ width: 1px; align-self: stretch; background: {BORDA}; }}
 .vandi-titulo {{ flex: 1; min-width: 240px; }}
 .vandi-titulo b {{ display:block; font-family:'Montserrat',sans-serif; font-size: .98rem; color: {AZUL_ESCURO}; line-height:1.25; }}
-.vandi-titulo span {{ font-size: .8rem; color: {TEXTO_SUAVE}; }}
 .vandi-chip {{
     background: #EAF1F9; color: {AZUL}; border: 1px solid {BORDA}; border-radius: 999px;
     padding: .28rem .8rem; font-size: .76rem; font-weight: 600; white-space: nowrap;
@@ -100,72 +99,3 @@ h3 {{ font-size: 1.1rem !important; }}
 /* ---------- cartões, formulários, campos ---------- */
 [data-testid="stForm"] {{
     background:#FFFFFF; border:1px solid {BORDA}; border-radius:14px; padding:1.4rem 1.6rem;
-    box-shadow: 0 2px 10px rgba(22,67,109,.05);
-}}
-.stTextInput input, .stTextArea textarea, .stSelectbox [data-baseweb="select"] > div {{
-    border-radius: 9px !important; border-color: {BORDA} !important; background:#FFFFFF !important;
-}}
-.stTextInput input:focus, .stTextArea textarea:focus {{ border-color:{AZUL} !important; box-shadow:0 0 0 1px {AZUL} !important; }}
-[data-testid="stFileUploaderDropzone"] {{
-    background:#FFFFFF; border:2px dashed {AZUL_CLARO}; border-radius:14px; padding:1.6rem;
-}}
-
-/* ---------- botões ---------- */
-.stButton > button, .stFormSubmitButton > button, .stDownloadButton > button {{
-    border-radius: 10px; font-weight: 600; padding: .55rem 1.3rem; border: 1px solid {AZUL}; transition: all .15s;
-}}
-.stButton > button[kind="primary"], .stFormSubmitButton > button[kind="primaryFormSubmit"], .stFormSubmitButton > button[kind="primary"] {{
-    background: {AZUL}; color:#FFFFFF; border-color:{AZUL};
-}}
-.stButton > button[kind="primary"]:hover, .stFormSubmitButton > button:hover {{
-    background:{AZUL_ESCURO}; border-color:{AZUL_ESCURO}; color:#FFFFFF;
-}}
-.stButton > button:disabled {{ background:{BORDA}; border-color:{BORDA}; color:{TEXTO_SUAVE}; }}
-.stDownloadButton > button {{ background:#FFFFFF; color:{AZUL}; }}
-.stDownloadButton > button:hover {{ background:#EAF1F9; }}
-
-/* ---------- alertas e tabelas ---------- */
-[data-testid="stAlert"] {{ border-radius: 12px; border: 1px solid {BORDA}; }}
-[data-testid="stDataFrame"] {{ border:1px solid {BORDA}; border-radius:12px; overflow:hidden; }}
-[data-testid="stExpander"] {{ background:#FFFFFF; border:1px solid {BORDA}; border-radius:12px; }}
-
-/* ---------- barra lateral (administração) ---------- */
-[data-testid="stSidebar"] {{ background:#FFFFFF; border-right:1px solid {BORDA}; }}
-</style>
-"""
-
-
-def aplicar_tema():
-    """Injeta o CSS da VANDI. Chamar logo após st.set_page_config()."""
-    st.markdown(CSS, unsafe_allow_html=True)
-
-
-def cabecalho(area: str | None = None):
-    """Faixa superior com o logo, o nome por extenso e a norma de referência."""
-    b64 = _logo_b64()
-    logo = (f'<img src="data:image/png;base64,{b64}" alt="VANDI">' if b64
-            else '<span class="vandi-wordmark">VANDI</span>')
-    chip = area or "NT.017.EQTL · Rev. 04"
-    st.markdown(
-        f"""
-        <div class="vandi-header">
-            {logo}
-            <div class="vandi-sep"></div>
-            <div class="vandi-titulo">
-                <b>Validador Automatizado de Documentação<br>para Incorporação de Redes de Distribuição</b>
-            <div class="vandi-chip">{chip}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
-def etapas(atual: int):
-    """Indicador de progresso: 1 Cadastro · 2 Envio · 3 Resultado."""
-    nomes = ["Cadastro", "Envio da documentação", "Resultado"]
-    itens = []
-    for i, nome in enumerate(nomes, start=1):
-        cls = "ativa" if i == atual else ("feita" if i < atual else "")
-        marca = "✓" if i < atual else str(i)
-        itens.append(f'<div class="vandi-etapa {cls}"><i>{marca}</i>{nome}</div>')
-    st.markdown(f'<div class="vandi-etapas">{"".join(itens)}</div>', unsafe_allow_html=True)
